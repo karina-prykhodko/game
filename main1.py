@@ -48,14 +48,30 @@ class Ball:
     def draw(self):
         self.actor.draw()
 
+class Heart:
+
+    def __init__(self, x):
+        self.actor = Actor('heart.png', center=(30*x + 15, 20))
+
+    def draw(self):
+        self.actor.draw()
+
+
+
 paddle = Paddle()
 ball = Ball()
+
+hearts = []
+for i in range(3):
+    hearts.append(Heart(i))
 
 def draw():
     screen.clear()
     paddle.draw()
     ball.draw()
 
+    for heart in hearts:
+        heart.draw()
 
 def update(dt):
     ball.update()
