@@ -15,13 +15,23 @@ class Paddle:
         self.actor.draw()
 
 
-paddle = Paddle()
+class Ball:
 
+    def __init__(self, speed=-1):
+        self.actor = Actor('ball.png', center=(WIDTH // 2, HEIGHT//2))
+
+
+    def draw(self):
+        self.actor.draw()
+
+paddle = Paddle()
+ball = Ball()
 
 def draw():
     pass
     screen.clear()
     paddle.draw()
+    ball.draw()
 
 
 def update(dt):
