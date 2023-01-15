@@ -41,6 +41,11 @@ class Ball:
             self.dy = -self.dy
 
         if self.actor.y == HEIGHT:
+            global hearts
+            if len(hearts) != 0:
+                del hearts[-1]
+            else:
+                hearts = [Actor('gameover.png',center=(WIDTH // 2, HEIGHT//2))]
             self.actor.y = HEIGHT // 2
             self.actor.x = WIDTH // 2
 
