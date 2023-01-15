@@ -3,6 +3,7 @@ import pgzrun
 import pygame
 from pgzero.actor import Actor
 import random
+from math import sqrt
 
 WIDTH = 600
 HEIGHT = 800
@@ -62,6 +63,37 @@ class Heart:
         self.actor.draw()
 
 
+class Obstacle:
+
+    def __init__(self, x , y, radius=30, color='blue'):
+        self.pos = x, y
+        self.radius = radius
+        self.color = color
+        self.status = True
+
+    # def update(self, ball):
+    #     length = sqrt((self.pos[0] - ball.actor.dx) + (self.pos[1] - ball.actor.dy))
+    #     if length == int(self.radius + ball.raduis):
+    #         self.status = False
+
+
+    def draw(self):
+        if self.status:
+            screen.draw.filled_circle(self.pos, self.radius, self.color)
+        else:
+            pass
+
+def create_obstacles(k = 6, y = 100 ):
+
+    оbstacles_balls = []
+    x = WIDTH // k+3
+    for i in range(k):
+        оbstacles_balls.append(Obstacle(x * i + 45, y))
+
+    for i in range(k-1):
+        оbstacles_balls.append(Obstacle(x * i + 90, y+90))
+
+    return оbstacles_balls
 
 paddle = Paddle()
 ball = Ball()
@@ -70,6 +102,8 @@ hearts = []
 for i in range(3):
     hearts.append(Heart(i))
 
+оbstacles = create_obstacles()
+
 def draw():
     screen.clear()
     paddle.draw()
@@ -77,6 +111,9 @@ def draw():
 
     for heart in hearts:
         heart.draw()
+
+    for item in оbstacles:
+        item.draw()
 
 def update(dt):
     ball.update()
