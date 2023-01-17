@@ -51,7 +51,6 @@ class Ball:
             self.actor.y = HEIGHT // 2
             self.actor.x = WIDTH // 2
 
-
     def draw(self):
         self.actor.draw()
 
@@ -74,7 +73,7 @@ class Obstacle:
 
     def update(self, ball):
         length = sqrt((self.pos[0] - ball.actor.x)**2 + (self.pos[1] - ball.actor.y)**2)
-        if length == int(self.radius + ball.radius):
+        if length <= int(self.radius + ball.radius):
             self.status = False
         return self.status
 
@@ -123,6 +122,9 @@ def update(dt):
     for item in оbstacles:
         if item.update(ball) == False:
             оbstacles.remove(item)
+            ball.dx = -ball.dx
+            ball.dy = -ball.dy
+
 
 def on_mouse_move(pos):
     x, y = pos
