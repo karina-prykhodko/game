@@ -24,11 +24,12 @@ class Paddle:
 
 class Ball:
 
-    def __init__(self, speed=-2):
+    def __init__(self, speed=-2, radius=20):
         self.actor = Actor('ball.png', center=(WIDTH // 2, HEIGHT//2))
         self.speed = speed
         self.dx = self.speed
         self.dy = self.speed
+        self.radius = radius
 
 
     def update(self):
@@ -71,14 +72,15 @@ class Obstacle:
         self.color = color
         self.status = True
 
-    # def update(self, ball):
-    #     length = sqrt((self.pos[0] - ball.actor.dx) + (self.pos[1] - ball.actor.dy))
-    #     if length == int(self.radius + ball.raduis):
-    #         self.status = False
+    def update(self, ball):
+        length = sqrt((self.pos[0] - ball.actor.x)**2 + (self.pos[1] - ball.actor.y)**2)
+        if length == int(self.radius + ball.radius):
+            self.status = False
+        return self.status
 
 
     def draw(self):
-        if self.status:
+        if self.status == True:
             screen.draw.filled_circle(self.pos, self.radius, self.color)
         else:
             pass
@@ -118,6 +120,9 @@ def draw():
 def update(dt):
     ball.update()
     paddle.update(ball)
+    for item in оbstacles:
+        if item.update(ball) == False:
+            оbstacles.remove(item)
 
 def on_mouse_move(pos):
     x, y = pos
