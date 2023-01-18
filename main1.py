@@ -8,6 +8,7 @@ from math import sqrt
 WIDTH = 600
 HEIGHT = 800
 
+
 class Paddle:
 
     def __init__(self):
@@ -24,7 +25,7 @@ class Paddle:
 
 class Ball:
 
-    def __init__(self, speed=-2, radius=20):
+    def __init__(self, speed=-3, radius=20):
         self.actor = Actor('ball.png', center=(WIDTH // 2, HEIGHT//2))
         self.speed = speed
         self.dx = self.speed
@@ -65,7 +66,7 @@ class Heart:
 
 class Obstacle:
 
-    def __init__(self, x , y, radius=30, color='blue'):
+    def __init__(self, x , y, radius=30, color = 'blue'):
         self.pos = x, y
         self.radius = radius
         self.color = color
@@ -84,6 +85,39 @@ class Obstacle:
         else:
             pass
 
+class Life:
+
+    def __init__(self, x, y , time: int):
+        self.actor = Actor('heart.png', center =(x, y))
+        self.time = time * 1000
+        self.last = pygame.time.get_ticks()
+        self.status = True
+
+    def update(self):
+        global hearts
+        if self.status == False:
+            self.actor.y += 5
+
+        if self.actor.colliderect(paddle.actor):
+            hearts.append(hearts[-1])
+            self.actor.pos = (-10, -10)
+            self.status = True
+
+        if self.actor.y > HEIGHT + 20:
+            self.actor.pos = (-10, -10)
+            self.status = True
+
+        now = pygame.time.get_ticks()
+        if now - self.last >= self.time:
+            self.last = now
+            self.status = False
+            self.actor.pos = (random.randint(10, WIDTH - 10), 0)
+
+
+    def draw(self):
+        self.actor.draw()
+
+
 def create_obstacles(k = 6, y = 100 ):
 
     оbstacles_balls = []
@@ -98,6 +132,7 @@ def create_obstacles(k = 6, y = 100 ):
 
 paddle = Paddle()
 ball = Ball()
+life = Life(random.randint(0,600), 0 , 12)
 
 hearts = []
 for i in range(3):
@@ -109,16 +144,22 @@ def draw():
     screen.clear()
     paddle.draw()
     ball.draw()
+    life.draw()
 
     for heart in hearts:
         heart.draw()
 
-    for item in оbstacles:
-        item.draw()
+    if not оbstacles == None:
+        for item in оbstacles:
+            item.draw()
+    else:
+        win = Actor('youwon.png', center=(WIDTH // 2, HEIGHT // 2))
+        win.draw()
 
 def update(dt):
     ball.update()
     paddle.update(ball)
+    life.update()
     for item in оbstacles:
         if item.update(ball) == False:
             оbstacles.remove(item)
@@ -132,3 +173,4 @@ def on_mouse_move(pos):
 
 
 pgzrun.go()
+#
